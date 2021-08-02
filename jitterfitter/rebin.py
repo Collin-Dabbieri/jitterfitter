@@ -64,12 +64,12 @@ def rebin(wave1,wave2,spec1,spec2,err_spec1=None,err_spec2=None):
     '''
 
     # assign number of points for common bins
-    numpoints=min([len(wave1),len(wave2)])
+    numpoints=np.amin(np.asarray([len(wave1),len(wave2)]))
 
     # minimum wavelength is the lowest shared wavelength
-    minWL=max([min(wave1),min(wave2)])
+    minWL=np.amax(np.asarray([min(wave1),min(wave2)]))
     # maximum wavelength is the highest shared wavelength
-    maxWL=min([max(wave1),max(wave2)])
+    maxWL=np.amin(np.asarray([max(wave1),max(wave2)]))
 
     # create common wavelength bins
     wave=np.linspace(minWL,maxWL,numpoints)
@@ -98,6 +98,7 @@ def rebin(wave1,wave2,spec1,spec2,err_spec1=None,err_spec2=None):
     spec1_interp=spec1_interp_nonorm*spec1_norm
     spec2_norm=spec2_integral/spec2_interp_integral
     spec2_interp=spec2_interp_nonorm*spec2_norm
+    
     if err_spec1 is not None:
         err_spec1_interp=err_spec1_interp_nonorm*spec1_norm
     if err_spec2 is not None:
