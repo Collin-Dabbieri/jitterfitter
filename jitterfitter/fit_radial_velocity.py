@@ -120,7 +120,7 @@ def calculate_velocity_CI(velocities,chisqs,vel_min,chisq_min):
     mask=np.where(chisqs_upsample<chisq_max)
     vels_CI=velocities_upsample[mask]
     if len(vels_CI)==0:
-        print("Warning: Velocity CI is Empty")
+        #print("Warning: Velocity CI is Empty")
         vels_CI=[vel_min]
     
     #argmin=np.argmin(chisqs)
@@ -200,8 +200,13 @@ def fit_radial_velocity(wave,spec1,spec2,err1,err2,minWL,maxWL,norm_bands,vmin=-
         #normalize spectra
         
         #time0=time.time()
-        # use both the continuum bands and the band for the emission line for normalization  
-        a,b=normalize(wave_iter,spec1_iter,spec2_iter,norm_bands)
+        # use both the continuum bands and the band for the emission line for normalization
+        # add a lazy catch for a one in a million error that comes from spec1_iter or spec2_iter being []
+        try:
+            a,b=normalize(wave_iter,spec1_iter,spec2_iter,norm_bands)
+        except:
+            return None,None,None,None,None,None,None,None,None,None
+            
         spec1_iter_norm=a*spec1_iter+b
         spec2_iter_norm=spec2_iter
 
